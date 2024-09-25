@@ -31,8 +31,13 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y ninja-build  # Ninja aracını yükler
 
+    - name: Create necessary directories
+      run: |
+        mkdir -p nrf_workspace && cd nrf_workspace  # Gerekli dizinleri oluşturuyor      
+
     - name: Initialize West workspace
       run: |
+        cd nrf_workspace
         west init -m https://github.com/nrfconnect/sdk-nrf  # SDK repo'sunu klonluyor
         west update  # Bağımlılıkları güncelliyor
         west zephyr-export  # Zephyr çevresel değişkenlerini yüklüyor    
@@ -45,14 +50,13 @@ jobs:
         # Ek parametreler eklenebilir
 
 
-    - name: Create necessary directories
-      run: |
-        mkdir -p build  # Build dizinini oluşturuyor
-
+  
     - name: Build the project
       run: |
+        cd nrf_workspace
         west build -b nrf52dk_nrf52832 -d build  # Build işlemi için gerekli komut
 
     - name: Run Tests
       run: |
+        cd nrf_workspace
         west test  # Eğer testler tanımlıysa çalıştırmak için
