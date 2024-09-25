@@ -1,0 +1,29 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main  # Ana dalınızı belirtin
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up the environment
+        run: |
+          # Gerekli araçları ve SDK'yı yükleyin
+          sudo apt-get install -y cmake
+          # Buraya diğer kurulum komutlarını ekleyin
+
+      - name: Build the project
+        run: |
+          cd src
+          cmake ..
+          make
