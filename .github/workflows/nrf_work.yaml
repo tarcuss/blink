@@ -51,3 +51,9 @@ jobs:
     - name: Create build directory
       run: |
         mkdir -p nrf_workspace/build  # Build dizinini oluşturuyor
+
+
+    - name: Build the project
+      run: |
+        cd nrf_workspace  # nrf_workspace dizinine geç
+        west build -b nrf52dk_nrf52832 -s . -d build
