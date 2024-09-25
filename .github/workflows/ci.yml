@@ -1,62 +1,18 @@
-name: NRF Connect SDK CI
-
-on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
-  workflow_dispatch:
-
+name: GitHub Actions Demo
+run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
+on: [push]
 jobs:
-  build:
-    runs-on: ubuntu-latest  # Ubuntu ortamı kullanılıyor
-
+  Explore-GitHub-Actions:
+    runs-on: ubuntu-latest
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2  # Depoyu çekiyor
-
-    - name: Set up Python
-      uses: actions/setup-python@v2  # Python ortamını kuruyor
-      with:
-        python-version: '3.x'
-
-    - name: Install West tool
-      run: |
-        pip install west  # West aracını yüklüyor
-
-    - name: Install Ninja build system
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y ninja-build  # Ninja aracını yükler
-
-    - name: Create necessary directories
-      run: |
-        mkdir -p nrf_workspace && cd nrf_workspace  # Gerekli dizinleri oluşturuyor      
-
-    - name: Initialize West workspace
-      run: |
-        cd nrf_workspace
-        west init -m https://github.com/nrfconnect/sdk-nrf  # SDK repo'sunu klonluyor
-        west update  # Bağımlılıkları güncelliyor
-        west zephyr-export  # Zephyr çevresel değişkenlerini yüklüyor    
-
-    - name: NRF Connect SDK CI action
-      uses: embedd-actions/nrf-connect-sdk-ci@v2.7.0
-      with:
-        board: nrf52dk_nrf52832  # Geliştirme kartını burada belirtiyoruz
-        build_dir: build  # Default olarak build dizinini kullanıyoruz
-        # Ek parametreler eklenebilir
-
-
-  
-    - name: Build the project
-      run: |
-        cd nrf_workspace
-        west build -b nrf52dk_nrf52832 -d build  # Build işlemi için gerekli komut
-
-    - name: Run Tests
-      run: |
-        cd nrf_workspace
-        west test  # Eğer testler tanımlıysa çalıştırmak için
+      - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
+      - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
+      - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
+      - name: Check out repository code
+        uses: actions/checkout@v4
+      - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
+      - run: echo "🖥️ The workflow is now ready to test your code on the runner."
+      - name: List files in the repository
+        run: |
+          ls ${{ github.workspace }}
+      - run: echo "🍏 This job's status is ${{ job.status }}."
