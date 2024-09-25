@@ -1,0 +1,36 @@
+name: Build with NRF Connect SDK
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install NRF Connect SDK
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y python3-pip west
+          west init -m https://github.com/nrfconnect/sdk-nrf --mr main
+          west update
+          west zephyr-export
+          pip3 install -r zephyr/scripts/requirements.txt
+
+      - name: Build the application
+        run: |
+          west build -b nrf52dk_nrf52832 zephyr/samples/basic/blink
+          
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: build
+          path: build/
