@@ -1,14 +1,49 @@
+name: Build with NRF Connect SDK
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
 
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+  
+      - name: Install West tool
+        run: |
+          pip install west
+  
+      - name: Install Ninja build system
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ninja-build
 
-    - name: Build
-      uses: embedd-actions/nrf-connect-sdk-ci@v2.7.0
-      with:
-        board: nrf52833dk_nrf52833
-        build_dir: build
+      - name: NRF Connect SDK CI action
+        uses: embedd-actions/nrf-connect-sdk-ci@v2.7.0
+        with:
+          board: nrf52dk_nrf52832  # Geliştirme kartını burada belirtiyoruz
+          build_dir: build  # Default olarak build dizinini kullanıyoruz
+        # Ek parametreler eklenebilir
+
+      
+      - name: Build the application
+        run: |
+          west build -b nrf52dk_nrf52832 zephyr/samples/basic/blink
+          
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: build
+          path: build/
