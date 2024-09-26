@@ -31,16 +31,6 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y ninja-build  # Ninja aracını yükler
         
-    - name: Create necessary directories
-      run: |
-        mkdir -p nrf_workspace  # Gerekli dizinleri oluşturuyor    
-
-    - name: Initialize West workspace
-      run: |
-        cd nrf_workspace  # nrf_workspace dizinine geç
-        west init -m https://github.com/nrfconnect/sdk-nrf  # SDK repo'sunu klonluyor
-        west update  # Bağımlılıkları güncelliyor
-        west zephyr-export  # Zephyr çevresel değişkenlerini yüklüyor  
         
 
     - name: Install required dependencies for zephyr
@@ -52,9 +42,28 @@ jobs:
 
     - name: version check
       run: |
-        cmake --version
+        cmake --version 
         python3 --version
         dtc --version
+    - name: python3-venv setup
+      run: |
+        sudo apt install python3-venv
+        python3 -m venv ~/zephyrproject/.venv
+        source ~/zephyrproject/.venv/bin/activate
+
+    - name: Create necessary directories
+      run: |
+        mkdir -p nrf_workspace  # Gerekli dizinleri oluşturuyor
+
+    - name: Initialize West workspace
+      run: |
+        cd nrf_workspace  # nrf_workspace dizinine geç
+        west init -m https://github.com/nrfconnect/sdk-nrf  # SDK repo'sunu klonluyor
+        west update  # Bağımlılıkları güncelliyor
+        west zephyr-export  # Zephyr çevresel değişkenlerini yüklüyor
+        pip install -r ~/zephyrproject/zephyr/scripts/requirements.txt
+
+    
 
     - name: NRF Connect SDK CI action
       uses: embedd-actions/nrf-connect-sdk-ci@v2.7.0
