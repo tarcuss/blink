@@ -61,7 +61,7 @@ jobs:
         west init -m https://github.com/nrfconnect/sdk-nrf  # SDK repo'sunu klonluyor
         west update  # Bağımlılıkları güncelliyor
         west zephyr-export  # Zephyr çevresel değişkenlerini yüklüyor
-        pip install -r ~/zephyrproject/zephyr/scripts/requirements.txt
+        pip install -r /home/runner/work/blink/blink/nrf_workspace/zephyr/scripts/requirements.txt
 
     
 
