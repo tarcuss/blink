@@ -41,6 +41,9 @@ jobs:
         west init -m https://github.com/nrfconnect/sdk-nrf  # SDK repo'sunu klonluyor
         west update  # Bağımlılıkları güncelliyor
         west zephyr-export  # Zephyr çevresel değişkenlerini yüklüyor  
+        cmake --version
+        python3 --version
+        dtc --version
 
     - name: NRF Connect SDK CI action
       uses: embedd-actions/nrf-connect-sdk-ci@v2.7.0
